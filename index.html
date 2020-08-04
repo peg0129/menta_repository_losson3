@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>canvas tutorial</title>
+    <link href="style.css" type="text/css" rel="stylesheet">
+    <style>
+      #canvas {
+        background: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <script>
+      var canvas = document.getElementById("canvas"); //canvasタグ情報取得
+      // ここにコードを書いていきます
+      var context = canvas.getContext('2d');　//変数circleにcanvas情報入れる
+
+      function distance(x1, y1, x2, y2) { //2点間の距離を算出
+        return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+      }
+
+      class Ball{ //クラス定義
+        constructor(x,y,scale,color){
+          this.x = x;
+          this.y = y;
+          this.scale = scale;
+          this.color = color;
+          this.addForce = 0;
+          this.addForceVec = {
+            x : 0,
+            y : 0
+          };
+          this.firstPosition = {
+            x : this.x,
+            y : this.y
+          };
+          this.firstScale = this.scale;
+        }
+
+        update(){ //mouse hover
+          this.x = this.firstPosition.x + this.addForceVec.x;
+          this.y = this.firstPosition.y + this.addForceVec.y;
+          this.scale = this.firstScale + (this.addForce * 0.5);
+          console.log(this.addForce);
+
+          let dis = distance(mouseX,mouseY,this.x,this.y);
+          if(dis < 100){ //2点の距離が100以下
+            let ballMouseRad = Math.atan2(this.y - mouseY,this.x - mouseX); //mouseからみたball角度（逃げる方向）
+
+            this.addForce = (100 - dis) / 10; //距離100以下で2点の距離が縮まるほどaddForceは大きくなる / 数値を抑える係数？
+            this.addForceVec.x += Math.cos(ballMouseRad) * this.addForce;
+            this.addForceVec.y += Math.sin(ballMouseRad) * this.addForce;
+          }
+          if(this.addForce > 0.01){ //加えてる力を0に近づける
+            this.addForceVec.x *= 0.8;
+            this.addForceVec.y *= 0.8;
+            this.addForce *= 0.8;
+          }else{
+            this.addForceVec.x *= 0;
+            this.addForceVec.y *= 0;
+            this.addForce *= 0;
+          }
+          console.log(this.addForce);
+        }
+
+        draw(){ //描画系定義
+          context.beginPath();　//パス開始
+          //描写cmd　start
+          context.arc(this.x,this.y,this.scale,0,Math.PI * 2, true);　//X座標、Y座標、r、sラジアン変換（0°）、eラジアン変換（360°）、右周りで推移
+          context.fillStyle = this.color;　//塗り潰し色指定
+          context.fill();　//塗り潰し描写
+          context.closePath(); //パス終了
+        }
+      }
+
+      const array_ball = [];　//クラスballを入れる配列定義
+
+      let startX = canvas.width / 20;
+      let startY = canvas.height / 20;
+      window.addEventListener('load',(e) => {
+        while(startX < canvas.width && startY < canvas.height){
+          let ballScale = 5;
+          let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
+          let ball = new Ball(startX,startY,ballScale,randomColor);　//クリック時座標を入れ配列の先頭に格納
+          startX += canvas.width / 20;
+          if(startX >= canvas.width){
+            startX = canvas.width / 20;
+            startY += canvas.height / 20;
+          }
+          array_ball.unshift(ball);
+        }
+        console.log(array_ball.length);
+      });
+
+      let mouseX;
+      let mouseY;
+      canvas.addEventListener('mousemove',(e) => {
+        mouseX = e.offsetX;
+        mouseY = e.offsetY;
+      });
+
+      loop(); //関数loop実行
+      function loop(){
+        context.clearRect(0,0,canvas.width,canvas.height);
+        for(let i = 0; i < array_ball.length; i++){
+          array_ball[i].draw();
+          array_ball[i].update();
+          console.log(array_ball);
+        }
+        var requestID = requestAnimationFrame(loop);　//戻り値(requestAnimationFrameの完了結果）を変数requestIDへ代入
+      }
+    </script>
+  </body>
+
+</html>

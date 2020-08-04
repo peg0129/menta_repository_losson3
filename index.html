@@ -21,7 +21,7 @@
       }
 
       class Ball{ //クラス定義
-        constructor(x,y,scale,color){
+        constructor(x, y, scale, color){
           this.x = x;
           this.y = y;
           this.scale = scale;
@@ -46,7 +46,7 @@
 
           let dis = distance(mouseX,mouseY,this.x,this.y);
           if(dis < 100){ //2点の距離が100以下
-            let ballMouseRad = Math.atan2(this.y - mouseY,this.x - mouseX); //mouseからみたball角度（逃げる方向）
+            let ballMouseRad = Math.atan2(this.y - mouseY, this.x - mouseX); //mouseからみたball角度（逃げる方向）
 
             this.addForce = (100 - dis) / 10; //距離100以下で2点の距離が縮まるほどaddForceは大きくなる / 数値を抑える係数？
             this.addForceVec.x += Math.cos(ballMouseRad) * this.addForce;
@@ -67,10 +67,10 @@
         draw(){ //描画系定義
           context.beginPath();　//パス開始
           //描写cmd　start
-          context.arc(this.x,this.y,this.scale,0,Math.PI * 2, true);　//X座標、Y座標、r、sラジアン変換（0°）、eラジアン変換（360°）、右周りで推移
+          context.arc(this.x, this.y, this.scale, 0, Math.PI * 2, true);　//X座標、Y座標、r、sラジアン変換（0°）、eラジアン変換（360°）、右周りで推移
           context.fillStyle = this.color;　//塗り潰し色指定
           context.fill();　//塗り潰し描写
-          context.closePath(); //パス終了  
+          context.closePath(); //パス終了
         }
       }
 
@@ -82,7 +82,7 @@
         while(startX < canvas.width && startY < canvas.height){
           let ballScale = 5;
           let randomColor = "#" + Math.floor(Math.random() * 16777215).toString(16);
-          let ball = new Ball(startX,startY,ballScale,randomColor);　//クリック時座標を入れ配列の先頭に格納
+          let ball = new Ball(startX, startY, ballScale, randomColor);　//クリック時座標を入れ配列の先頭に格納
           startX += canvas.width / 20;
           if(startX >= canvas.width){
             startX = canvas.width / 20;
@@ -102,13 +102,13 @@
 
       loop(); //関数loop実行
       function loop(){
-        context.clearRect(0,0,canvas.width,canvas.height);
+        context.clearRect(0, 0, canvas.width, canvas.height);
         for(let i = 0; i < array_ball.length; i++){
           array_ball[i].draw();
           array_ball[i].update();
           console.log(array_ball);
         }
-        var requestID = requestAnimationFrame(loop);　//戻り値(requestAnimationFrameの完了結果）を変数requestIDへ代入
+        requestAnimationFrame(loop);　//戻り値(requestAnimationFrameの完了結果）を変数requestIDへ代入
       }
     </script>
   </body>

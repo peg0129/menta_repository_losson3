@@ -42,7 +42,6 @@
           this.x = this.firstPosition.x + this.addForceVec.x;
           this.y = this.firstPosition.y + this.addForceVec.y;
           this.scale = this.firstScale + (this.addForce * 0.5);
-          console.log(this.addForce);
 
           let dis = distance(mouseX,mouseY,this.x,this.y);
           if(dis < 100){ //2点の距離が100以下
@@ -61,7 +60,6 @@
             this.addForceVec.y *= 0;
             this.addForce *= 0;
           }
-          console.log(this.addForce);
         }
 
         draw(){ //描画系定義
@@ -70,7 +68,7 @@
           context.arc(this.x,this.y,this.scale,0,Math.PI * 2, true);　//X座標、Y座標、r、sラジアン変換（0°）、eラジアン変換（360°）、右周りで推移
           context.fillStyle = this.color;　//塗り潰し色指定
           context.fill();　//塗り潰し描写
-          context.closePath(); //パス終了  
+          context.closePath(); //パス終了
         }
       }
 
@@ -90,7 +88,6 @@
           }
           array_ball.unshift(ball);
         }
-        console.log(array_ball.length);
       });
 
       let mouseX;
